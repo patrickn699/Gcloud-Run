@@ -23,7 +23,7 @@ def main():
             file =  st.file_uploader('Upload your file', type=['csv'])
             #st.write(converter.convert_to_xls(st.file_uploader('Upload your file', type=['csv', 'xls', 'xlsx'])))
             converter.upload_blob_from_memory("bucket_raw_received", file, file.name+".csv")
-            st.write(converter.convert_to_excel(file.name+".csv"))
+            st.write(converter.convert_to_xls(file.name+".csv"))
             time.sleep(3)
             # download_blob("bucket_raw_converted", "converted"+file.name+".xls", "converted"+file.name+".xls")
             exc = pd.read_excel("converted"+file.name+".xls")
