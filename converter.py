@@ -101,3 +101,13 @@ def upload_blob_from_memory(bucket_name, contents, destination_blob_name):
             destination_blob_name, contents, bucket_name
         )
     )
+
+
+def create_bucket(bucket_name):
+    """Creates a new bucket."""
+    # bucket_name = "your-bucket-name"
+
+    storage_client = storage.Client()
+    bucket = storage_client.create_bucket(bucket_name)
+
+    print("Bucket {} created.".format(bucket.name))
