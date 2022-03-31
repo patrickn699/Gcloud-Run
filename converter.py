@@ -3,27 +3,27 @@ from google.cloud import storage
 
 
 
-def convert_to_xls(file_name):
+def convert_to_xls(file_name,bukcet_name_d, bukcet_name_u):
     """
     Converts the file to excel format
     """
     filename = "download_file.xls"
-    download_blob("bucket_name", file_name, file_name)
+    download_blob(bukcet_name_d, file_name, file_name)
     df = pd.read_csv(file_name)
     df.to_excel(file_name+ '.xls', index=False)
-    upload_blob("bucket_name", file_name+ '.xls', 'converted'+file_name+'.xls')
+    upload_blob(bukcet_name_u, file_name+ '.xls', 'converted'+file_name+'.xls')
     return "Converted to excel"
 
 
-def convert_to_csv(file_name):
+def convert_to_csv(file_name,bukcet_name_d,bukcet_name_u):
     """
     Converts the file to csv format
     """
     filename = "download_file.xls"
-    download_blob("bucket_name", file_name, file_name)
+    download_blob(bukcet_name_d, file_name, file_name)
     df = pd.read_excel(file_name)
     df.to_csv(file_name+ '.csv', index=False)
-    upload_blob("bucket_name", file_name+ '.csv', 'converted'+ file_name +'.csv')
+    upload_blob(bukcet_name_u, file_name+ '.csv', 'converted'+ file_name +'.csv')
     return "Converted to csv"
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):

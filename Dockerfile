@@ -8,5 +8,6 @@ WORKDIR /app
 
 RUN pip install streamlit
 RUN pip install google-cloud-storage
+RUN pip install xlwt
 
-CMD [ "streamlit", "run", "main.py", "--server.port", "8051" ]
+CMD [ "streamlit", "run", "sub_main.py", "--server.port", "8051" ]

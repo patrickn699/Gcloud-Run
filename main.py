@@ -20,7 +20,9 @@ def main():
         try:
             converter.create_bucket(source_buck)
             converter.create_bucket(dest_buck)
-        except:
+
+        except Exception as e:
+            st.write(e)
             st.write('Bucket already exists')
             pass
     
@@ -50,7 +52,8 @@ def main():
             exc = pd.read_excel("converted"+file.name+".xls")
             st.download_button(data= exc, file_name=file.name+".xls")
 
-        except:
+        except Exception as e:
+            st.write(e)
             st.write('Please upload a valid file')
 
     elif op == 'CSV':
@@ -65,7 +68,8 @@ def main():
             exc = pd.csv("converted"+file.name+".csv")
             st.download_button(data= exc, file_name=file.name+".csv")
 
-        except:
+        except Exception as e:
+            st.write(e)
             st.write('Please upload a valid file')
 
     else:
