@@ -1,7 +1,8 @@
+from fileinput import filename
 import streamlit as st
 import converter
 import pandas as pd
-import time, io
+import time
 
 
 
@@ -26,12 +27,12 @@ def main():
                 converter.create_bucket(dest_buck)
 
             except Exception as e:
-                st.write(e)
-                st.write('Bucket already exists')
+                st.warning('Bucket already exists')
+                #st.write('Bucket already exists')
                 #pass
         
         else:
-            st.write('Please enter a valid & unique bucket name')
+            st.write('Please enter a valid & globally unique bucket name')
 
 
         op = st.selectbox('What would you like to convert?',("Select",'Excel', 'CSV'))
@@ -47,15 +48,21 @@ def main():
             try:
                 # converting csv to xlsx
                 file =  st.file_uploader('Upload your file', type=['csv'])
-                #st.write(converter.convert_to_xls(st.file_uploader('Upload your file', type=['csv', 'xls', 'xlsx'])))
-                st.write(type(file))
-                #new_bytes_obj = io.BytesIO(file.encode('utf-8'))
-                converter.upload_blob_from_memory(srcb, file.getvalue(), file.name)
-                st.write(converter.convert_to_xls(file.name,bukcet_name_d = srcb, bukcet_name_u = destb))
-                time.sleep(3)
-                converter.download_blob(destb, "converted"+file.name+".xls", "converted"+file.name+".xls")
-                exc = pd.read_excel("converted"+file.name+".xls")
-                st.download_button(data= exc, file_name=file.name+".xls")
+                
+                #st.write(type(file))
+
+                if file != None:
+            
+                    st.write(file.name[:-4])
+                    converter.upload_blob_from_memory(srcb, file.getvalue(), file.name)
+                    st.write(converter.convert_to_xls(file.name,bukcet_name_d = srcb, bukcet_name_u = destb))
+                    time.sleep(3)
+                    converter.download_blob(destb, "converted"+file.name[:-4]+".xls", "converted"+file.name[:-4]+".xls")
+                    exc = pd.read_excel("converted"+file.name[:-4]+".xls")
+                    st.download_button(data= file.name[:-4]+".xls", file_name=file.name[:-4]+".xls",label='Download Excel')
+                
+                else:
+                    st.write('Please upload a valid file')
 
             except Exception as e:
                 st.write(e)
@@ -66,15 +73,23 @@ def main():
             try:
                 # converting xlsx to csv
                 file =  st.file_uploader('Upload your file', type=['xls', 'xlsx'])
-                st.write(type(file))
-                
-                #ne_bytes_obj = io.BytesIO(file.encode('utf-8'))
-                converter.upload_blob_from_memory(srcb, file.getvalue(), file.name+".xls")
-                st.write(converter.convert_to_csv(file.name+".xls",bukcet_name_d = srcb, bucket_name_u = destb))
-                time.sleep(3)
-                converter.download_blob(destb, "converted"+file.name+".csv", "converted"+file.name+".csv")
-                exc = pd.csv("converted"+file.name+".csv")
-                st.download_button(data= exc, file_name=file.name+".csv")
+                #st.write(type(file))
+               
+
+                if file!= None:
+                    st.write(file.type)
+                    v = file.name[:-4] if file.name[-4:] == '.xls' else file.name[:-5]
+                    st.write(v)
+                    #st.write(file.name[:-5])
+                    converter.upload_blob_from_memory(srcb, file.getvalue(), file.name)
+                    st.write(converter.convert_to_csv(file.name,bukcet_name_d = srcb, bukcet_name_u = destb))
+                    time.sleep(3)
+                    converter.download_blob(destb, "converted"+v+".csv", "converted"+v+".csv")
+                    exc = pd.read_csv("converted"+v+".csv")
+                    st.download_button(data=v+".csv", file_name=v+".csv",label="Download CSV")
+
+                else:
+                    st.write('Please upload a valid file')
 
             except Exception as e:
                 st.write(e)
